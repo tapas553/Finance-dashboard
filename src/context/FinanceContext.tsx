@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { AppState, Transaction, Category, BudgetGoal } from '../types';
+import { AppState, Transaction, Category } from '../types';
 
 const defaultCategories: Category[] = [
   { id: '1', name: 'Food', color: '#ef4444', icon: 'pizza' },
