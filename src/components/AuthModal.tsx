@@ -19,12 +19,18 @@ export const AuthModal: React.FC = () => {
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+        if (loginError) throw loginError;
       } else {
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        setSuccessMsg('Registration successful! You can now sign in.');
+        const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
+        if (signUpError) throw signUpError;
+        
+        // If automatic login is enabled (no email confirmation required)
+        if (data.session) {
+          return; // Modal will be removed by parent Layout
+        }
+
+        setSuccessMsg('Registration successful! Please check your email to verify your account before signing in.');
         setIsLogin(true);
         setPassword('');
       }
