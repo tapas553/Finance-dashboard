@@ -3,9 +3,12 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AuthModal } from './AuthModal';
+import { useAuth } from '../context/AuthContext';
 
 export const Layout: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, loading } = useAuth();
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-dark-bg transition-colors duration-200">
@@ -24,12 +27,17 @@ export const Layout: React.FC = () => {
         )}
       </AnimatePresence>
       
-      <div className="flex-1 flex flex-col w-full overflow-hidden">
+      <div className="flex-1 flex flex-col w-full overflow-hidden relative">
         <Topbar onMenuClick={() => setMobileMenuOpen(!mobileMenuOpen)} />
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>
+
+      {/* Auth Modal Overlay */}
+      <AnimatePresence>
+        {!loading && !user && <AuthModal />}
+      </AnimatePresence>
     </div>
   );
 };
